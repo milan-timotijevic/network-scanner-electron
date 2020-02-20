@@ -25,7 +25,7 @@ app.on('ready', async () => {
         app.quit();
     });
 
-     mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 
     mainWindow.webContents.on('did-finish-load', async () => {
 		const networks = await wifiHandler.scanNetworks();
