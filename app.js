@@ -1,11 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
-const wifi = require('node-wifi');
-
-wifi.init({
-	iface: null
-});
+const wifiHandler = require('./service/wifiHandler');
 
 let mainWindow;
 
@@ -32,18 +28,10 @@ app.on('ready', async () => {
     // mainWindow.webContents.openDevTools();
 
     mainWindow.webContents.on('did-finish-load', async () => {
-	    wifi.scan(function(err, networks) {
-		    if (err) {
-			    console.log(err);
-		    } else {
-			    mainWindow.webContents.send('networks:payload', networks);
-		    }
-	    });
-    });
-});
+		const networks = await wifiHandler.scanNetworks();
 
-ipcMain.on('omglol', function() {
-	console.log('event happened!')
+		mainWindow.webContents.send('networks:payload', networks);
+    });
 });
 
 

@@ -15,7 +15,7 @@ function populateNetworks(networks) {
 	clearNetworks();
 	networks.forEach(network => {
 		const opt = document.createElement('option');
-		opt.appendChild( document.createTextNode(network.mac) );
+		opt.appendChild( document.createTextNode(network.ssid + ' / ' + network.mac) );
 		opt.value = network.mac;
 		networksSelect.appendChild(opt);
 	});
@@ -26,7 +26,6 @@ ipcRenderer.on('networks:payload', (event, networks) => {
 });
 
 connectButton.addEventListener('click', function() {
-	ipcRenderer.send('omglol', {})
 	const password = passwordInput.value;
 	const selectedNetworkOption = networksSelect.options[networksSelect.selectedIndex];
 });
