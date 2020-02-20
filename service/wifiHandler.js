@@ -1,19 +1,36 @@
+const { ipcMain } = require('electron');
 const wifi = require('node-wifi');
 
 wifi.init({
 	iface: null
 });
 
-async function scanNetworks() {
-	return wifi.scan();
+function scanNetworks(webContents) {
+	wifi.scan((err, networks) => {
+		const result = {};
+		if (err) {
+			result.successful = false;
+			result.error = err;
+		} else {
+			result.successful = true;
+			result.networks = networks;
+		}
+
+		webContents.send('network-scan:result', result);
+	});
 }
 
-async function connectToNetwork(data) {
-	wifi.connect({ ssid: data.ssid, password: data.password }, function(err) {
+function connectToNetwork(data, webContents) {
+	wifi.connect({ ssid: data.ssid, password: data.password }, err => {
+		const result = {};
 		if (err) {
-			console.log(err);
+			result.successful = false;
+			result.error = err;
+		} else {
+			result.successful = true;
 		}
-		console.log("Connected");
+
+		webContents.send('connect:result', result);
 	});
 }
 
