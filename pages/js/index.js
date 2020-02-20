@@ -49,13 +49,27 @@ ipcRenderer.on('network-scan:result', (event, result) => {
 	}
 });
 
-connectButton.addEventListener('click', function() {
+function attemptToConnect() {
+	if (networksSelect.selectedIndex < 0) {
+		notify('You must select a network', true);
+		return;
+	}
+
 	const ssid = networksSelect.options[networksSelect.selectedIndex].value;
 	const password = passwordInput.value;
+
 
 	notify('Attempting to connect...');
 	connectedToElement.innerText = ``;
 	ipcRenderer.send('connect:request', { ssid, password })
+}
+
+connectButton.addEventListener('click', attemptToConnect);
+
+passwordInput.addEventListener('keydown', (event) => {
+	if (event.key === 'Enter') {
+		attemptToConnect();
+	}
 });
 
 ipcRenderer.on('connect:result', (event, result) => {
