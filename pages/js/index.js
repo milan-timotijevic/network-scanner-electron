@@ -16,7 +16,7 @@ function populateNetworks(networks) {
 	networks.forEach(network => {
 		const opt = document.createElement('option');
 		opt.appendChild( document.createTextNode(network.ssid + ' / ' + network.mac) );
-		opt.value = network.mac;
+		opt.value = network.ssid;
 		networksSelect.appendChild(opt);
 	});
 }
@@ -26,6 +26,8 @@ ipcRenderer.on('networks:payload', (event, networks) => {
 });
 
 connectButton.addEventListener('click', function() {
+	const ssid = networksSelect.options[networksSelect.selectedIndex].value;
 	const password = passwordInput.value;
-	const selectedNetworkOption = networksSelect.options[networksSelect.selectedIndex];
+
+	ipcRenderer.send('connect:request', { ssid, password })
 });

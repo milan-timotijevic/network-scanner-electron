@@ -25,13 +25,17 @@ app.on('ready', async () => {
         app.quit();
     });
 
-    // mainWindow.webContents.openDevTools();
+     mainWindow.webContents.openDevTools();
 
     mainWindow.webContents.on('did-finish-load', async () => {
 		const networks = await wifiHandler.scanNetworks();
 
 		mainWindow.webContents.send('networks:payload', networks);
     });
+});
+
+ipcMain.on('connect:request', (event, data) => {
+	wifiHandler.connectToNetwork(data);
 });
 
 
