@@ -8,7 +8,7 @@ wifi.init({
 function scanNetworks(webContents) {
 	wifi.scan((err, networks) => {
 		const result = {};
-		if (err) {
+		if (err || !Array.isArray(networks) || networks.length === 0) {
 			result.successful = false;
 			result.error = err;
 		} else {

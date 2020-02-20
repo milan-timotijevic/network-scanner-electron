@@ -44,7 +44,7 @@ ipcRenderer.on('network-scan:result', (event, result) => {
 		notify('Network scan complete', true);
 		populateNetworks(result.networks);
 	} else {
-		notify('Network scan failed');
+		notify('Network scan failed: unable to find any networks');
 	}
 });
 
