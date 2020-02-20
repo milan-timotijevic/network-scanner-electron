@@ -28,6 +28,7 @@ function connectToNetwork(data, webContents) {
 			result.error = err;
 		} else {
 			result.successful = true;
+			result.ssid = data.ssid;
 		}
 
 		webContents.send('connect:result', result);

@@ -1,6 +1,7 @@
 const electron = require('electron');
 const ipcRenderer = electron.ipcRenderer;
 
+const connectedToElement = document.getElementById('connected-to-element');
 const networksSelect = document.getElementById('networks-select');
 const connectButton = document.getElementById('connect-button');
 const passwordInput = document.getElementById('password-input');
@@ -48,18 +49,22 @@ ipcRenderer.on('network-scan:result', (event, result) => {
 	}
 });
 
-ipcRenderer.on('connect:result', (event, result) => {
-	if (result.successful) {
-		notify('Successfully connected', true);
-	} else {
-		notify('Failed to connect', true);
-	}
-});
-
 connectButton.addEventListener('click', function() {
 	const ssid = networksSelect.options[networksSelect.selectedIndex].value;
 	const password = passwordInput.value;
 
 	notify('Attempting to connect...');
+	connectedToElement.innerText = ``;
 	ipcRenderer.send('connect:request', { ssid, password })
 });
+
+ipcRenderer.on('connect:result', (event, result) => {
+	if (result.successful) {
+		notify('Successfully connected', true);
+		connectedToElement.innerText = `Connected to: ${result.ssid}`;
+	} else {
+		notify('Failed to connect', true);
+	}
+});
+
+
