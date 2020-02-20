@@ -1,0 +1,33 @@
+{
+  "name": "network-scanner-electron",
+  "version": "1.0.0",
+  "description": "A simple desktop app that detects Wifi networks in range",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "author": "Milan Timotijevic",
+  "license": "ISC",
+  "build": {
+    "asar": false,
+    "appId": "com.network.scanner",
+    "productName": "Network Scanner",
+    "target": "NSIS",
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false,
+      "perMachine": true
+    },
+    "mac": {
+      "category": "public.app-category.utilities"
+    }
+  },
+  "devDependencies": {
+    "electron": "^5.0.6",
+    "electron-builder": "^20.44.4"
+  },
+  "dependencies": {
+    "node-wifi": "^2.0.12"
+  }
+}
