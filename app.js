@@ -30,7 +30,10 @@ app.on('ready', async () => {
     mainWindow.webContents.on('did-finish-load', () => {
     	mainWindow.webContents.send('ready');
 
-        wifiHandler.scanNetworks(mainWindow.webContents);
+        wifiHandler.scanNetworks((result) => {
+        	mainWindow.webContents.send('network-scan:result', result);
+        });
+
         setInterval(() => {
 	        wifiHandler.getCurrentConnections((result) => {
 	        	mainWindow.webContents.send('current-connections:result', result);
@@ -40,7 +43,9 @@ app.on('ready', async () => {
 });
 
 ipcMain.on('connect:request', (event, data) => {
-	wifiHandler.connectToNetwork(data, mainWindow.webContents);
+	wifiHandler.connectToNetwork(data, (result) => {
+		mainWindow.webContents.send('connect:result', result);
+	});
 });
 
 

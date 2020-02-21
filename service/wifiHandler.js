@@ -1,11 +1,10 @@
-const { ipcMain } = require('electron');
 const wifi = require('node-wifi');
 
 wifi.init({
-	iface: null
+	iface: null,
 });
 
-function scanNetworks(webContents) {
+function scanNetworks(cb) {
 	wifi.scan((err, networks) => {
 		const result = {};
 		if (err || !Array.isArray(networks) || networks.length === 0) {
@@ -16,7 +15,7 @@ function scanNetworks(webContents) {
 			result.networks = networks;
 		}
 
-		webContents.send('network-scan:result', result);
+		cb(result);
 	});
 }
 
@@ -30,11 +29,12 @@ function getCurrentConnections(cb) {
 			result.successful = true;
 			result.connections = currentConnections;
 		}
+
 		cb(result);
 	});
 }
 
-function connectToNetwork(data, webContents) {
+function connectToNetwork(data, cb) {
 	wifi.connect({ ssid: data.ssid, password: data.password }, err => {
 		const result = {};
 		if (err) {
@@ -45,7 +45,7 @@ function connectToNetwork(data, webContents) {
 			result.ssid = data.ssid;
 		}
 
-		webContents.send('connect:result', result);
+		cb(result);
 	});
 }
 
