@@ -20,6 +20,20 @@ function scanNetworks(webContents) {
 	});
 }
 
+function getCurrentConnections(cb) {
+	wifi.getCurrentConnections((err, currentConnections) => {
+		const result = {};
+		if (err) {
+			result.successful = false;
+			result.error = err;
+		} else {
+			result.successful = true;
+			result.connections = currentConnections;
+		}
+		cb(result);
+	});
+}
+
 function connectToNetwork(data, webContents) {
 	wifi.connect({ ssid: data.ssid, password: data.password }, err => {
 		const result = {};
@@ -38,4 +52,5 @@ function connectToNetwork(data, webContents) {
 module.exports = {
 	scanNetworks,
 	connectToNetwork,
+	getCurrentConnections,
 };

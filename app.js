@@ -31,6 +31,11 @@ app.on('ready', async () => {
     	mainWindow.webContents.send('ready');
 
         wifiHandler.scanNetworks(mainWindow.webContents);
+        setInterval(() => {
+	        wifiHandler.getCurrentConnections((result) => {
+	        	mainWindow.webContents.send('current-connections:result', result);
+	        });
+        }, 1000);
     });
 });
 

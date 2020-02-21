@@ -49,6 +49,12 @@ ipcRenderer.on('network-scan:result', (event, result) => {
 	}
 });
 
+ipcRenderer.on('current-connections:result', (event, result) => {
+	if (result.successful && Array.isArray(result.connections) && result.connections.length > 0) {
+		connectedToElement.innerText = `Connected to: ${result.connections[0].ssid}`;
+	}
+});
+
 function attemptToConnect() {
 	if (networksSelect.selectedIndex < 0) {
 		notify('You must select a network', true);
